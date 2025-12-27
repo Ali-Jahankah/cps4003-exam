@@ -1,5 +1,9 @@
-def cli_menu():
+from load import DataLoader
 
+def cli_menu():
+    loader = DataLoader("./data/youtube_trending_videos.csv")
+    loader.load_csv()
+    loader.save_to_json("./data/data.json")
     while True:
         print("""\n -------------------------------
 | Please choose an option below |
