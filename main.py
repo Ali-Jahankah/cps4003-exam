@@ -15,7 +15,7 @@ def cli_menu():
         print("5.  Average engagement by category")
         print("6.  Trending duration per video")
         print("7.  High like/dislike ratio videos")
-        print("12. Exit")
+        print("8.  Exit")
         choice = input("\nSelect an option: ")
         print(choice)
 
