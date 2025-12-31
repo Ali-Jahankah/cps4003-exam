@@ -1,13 +1,14 @@
 from load import DataLoader
 from process import DataProcessor
 from visualise import Visualiser
+from export import DataExporter
 def cli_menu():
     loader = DataLoader("./data/youtube_trending_videos.csv")
     data = loader.load_csv()
     loader.save_to_json("./data/data.json")
     processor = DataProcessor(data)
-    Visualiser = Visualiser(data)
-
+    visualiser = Visualiser(data)
+    exporter = DataExporter(data)
     while True:
         print("""\n -------------------------------
 | Please choose an option below |
@@ -23,7 +24,11 @@ def cli_menu():
     9.  Histograms: views, likes, comments
     10. Line chart: avg trending duration per category
     11. Bar chart: engagement of top videos
-    12. Exit
+    12. Export video details (JSON)
+    13. Export top 10 videos (CSV / JSON)
+    14. Export category engagement metrics (JSON)
+    15. Export filtered dataset
+    16. Exit
         """)
 
         choice = int(input("\nSelect an option: "))
@@ -73,19 +78,52 @@ def cli_menu():
                       ------------------------""")
 
         elif choice == 8:
-            Visualiser.pie_videos_per_category()
+            visualiser.pie_videos_per_category()
 
         elif choice == 9:
-            Visualiser.histograms_engagement()
+            visualiser.histograms_engagement()
 
         elif choice == 10:
-            Visualiser.avg_trending_duration_per_category()
+            visualiser.avg_trending_duration_per_category()
 
         elif choice == 11:
-            Visualiser.bar_top_video_engagement()
-
-
+            visualiser.bar_top_video_engagement()
+        
         elif choice == 12:
+            term = input("Enter video ID or exact title: ")
+            video = processor.video_details(term)
+            if video:
+                exporter.export_video_json(video, "./data/video_export.json")
+            else:
+                print("Video not found.")
+
+        elif choice == 13:
+            format = input("Enter format (json/csv): ").lower()
+            top_videos = processor.top_10_videos()
+            exporter.export_top_10(
+                top_videos,
+                f"./data/top_10_videos.{format}",
+                format
+            )
+
+        elif choice == 14:
+            metrics = processor.category_engagement()
+            exporter.export_category_metrics(
+                metrics,
+                "./data/category_engagement.json"
+            )
+
+        elif choice == 15:
+            print("Filter keys: category_id | channel_title")
+            key = input("Enter filter key: ")
+            value = input("Enter filter value: ")
+            exporter.export_filtered(
+                key,
+                value,
+                "./data/filtered_data.json"
+            )
+        
+        elif choice == 16:
             print("Exiting program.")
             break
 
