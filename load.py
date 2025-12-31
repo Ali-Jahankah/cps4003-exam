@@ -1,6 +1,6 @@
 import csv
 import os
-from datetime import datetime
+from datetime import datetime, timezone
 import json
 class DataLoader:
     def __init__(self, filepath):
@@ -18,7 +18,7 @@ class DataLoader:
                 row['likes'] = int(row['likes'])
                 row['dislikes'] = int(row['dislikes'])
                 row['comment_count'] = int(row['comment_count'])
-                row['trending_date'] = datetime.strptime(row['trending_date'], "%y.%d.%m")
+                row['trending_date'] = datetime.strptime(row['trending_date'], "%y.%d.%m").replace(tzinfo=timezone.utc)
                 row['publish_time'] = datetime.fromisoformat(row['publish_time'].replace('Z', '+00:00'))
                 row["comments_disabled"] = row["comments_disabled"] == "True"
                 row["ratings_disabled"] = row["ratings_disabled"] == "True"
