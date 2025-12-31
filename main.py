@@ -1,23 +1,30 @@
 from load import DataLoader
 from process import DataProcessor
+from visualise import Visualiser
 def cli_menu():
     loader = DataLoader("./data/youtube_trending_videos.csv")
     data = loader.load_csv()
     loader.save_to_json("./data/data.json")
     processor = DataProcessor(data)
+    Visualiser = Visualiser(data)
 
     while True:
         print("""\n -------------------------------
 | Please choose an option below |
- -------------------------------""")
-        print("1.  Total videos and channels")
-        print("2.  Category summary")
-        print("3.  Video info by ID or title")
-        print("4.  Top trending videos")
-        print("5.  Average engagement by category")
-        print("6.  Trending duration per video")
-        print("7.  High like/dislike ratio videos")
-        print("8.  Exit")
+ -------------------------------
+    1.  Total videos and channels
+    2.  Category summary
+    3.  Video info by ID or title
+    4.  Top trending videos
+    5.  Average engagement by category
+    6.  Trending duration per video
+    7.  High like/dislike ratio videos
+    8.  Pie chart: videos per category
+    9.  Histograms: views, likes, comments
+    10. Line chart: avg trending duration per category
+    11. Bar chart: engagement of top videos
+    12. Exit
+        """)
 
         choice = int(input("\nSelect an option: "))
 
@@ -66,6 +73,19 @@ def cli_menu():
                       ------------------------""")
 
         elif choice == 8:
+            Visualiser.pie_videos_per_category()
+
+        elif choice == 9:
+            Visualiser.histograms_engagement()
+
+        elif choice == 10:
+            Visualiser.avg_trending_duration_per_category()
+
+        elif choice == 11:
+            Visualiser.bar_top_video_engagement()
+
+
+        elif choice == 12:
             print("Exiting program.")
             break
 
